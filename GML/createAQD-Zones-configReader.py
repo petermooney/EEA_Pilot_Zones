@@ -1,8 +1,20 @@
-import json
 import ConfigParser
 from pprint import pprint
 
 from xml.dom import minidom 
+
+
+'''
+Created by Dr. Peter Mooney
+Department of Computer Science, National University of Ireland Maynooth - and Environmental Research Centre, Environmental Protection Agency Ireland. 
+
+Please read the README.
+
+Backup important files before running this code! 
+
+Read the gml.cfg file carefully also. 
+
+'''
 
 """
 repeat the tab character n times. 
