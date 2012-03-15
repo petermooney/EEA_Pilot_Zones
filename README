@@ -12,7 +12,12 @@ the attirbute names in the original shapefile.
 
 To run the code - you can do so from the command prompt. 
 
-<b>
+
 python createAQD-Zones-configReader.py > name-of-output-file.gml
-</b>
+
 You can open this GML file in a desktop GIS to check that it was correctly created. 
+
+** 
+Installation
+**
+No real installation needed. A fully working Python installation is needed on your machine - only core libraries are used by this example. 
