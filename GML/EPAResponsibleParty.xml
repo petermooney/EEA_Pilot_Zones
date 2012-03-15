@@ -1,0 +1,140 @@
+			<aqd:AQD_ReportingUnits>
+			<am-ru:reportingAuthority>
+				<gmd:CI_ResponsibleParty>
+					<gmd:organisationName>Environmental Protection Agency</gmd:organisationName>
+				</gmd:CI_ResponsibleParty>
+			</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:onlineResource>
+									<gmd:CI_OnlineResource>
+										<gmd:linkage>http://www.epa.ie/whatwedo/monitoring/air/</gmd:linkage>
+									</gmd:CI_OnlineResource>
+								</gmd:onlineResource>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:individualName>Barbara O'Leary</gmd:individualName>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:deliveryPoint>EPA Regional Inspectorate, Richview, Clonskeagh</gmd:deliveryPoint>
+									</gmd:CI_Address>
+								</gmd:address>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:city>Dublin</gmd:city>
+									</gmd:CI_Address>
+								</gmd:address>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:postalCode>Dublin 14</gmd:postalCode>
+									</gmd:CI_Address>
+								</gmd:address>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:voice>+353 (0)1 2680100</gmd:voice>
+									</gmd:CI_Address>
+								</gmd:address>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
+
+			<aqd:AQD_ReportingUnits>
+				<am-ru:reportingAuthority>
+					<gmd:CI_ResponsibleParty>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:electronicMailAddress>b.oleary@epa.ie</gmd:electronicMailAddress>
+									</gmd:CI_Address>
+								</gmd:address>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+					</gmd:CI_ResponsibleParty>
+				</am-ru:reportingAuthority>
+			</aqd:AQD_ReportingUnits>
+
+
+
+
