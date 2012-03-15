@@ -17,7 +17,12 @@ python createAQD-Zones-configReader.py > name-of-output-file.gml
 
 You can open this GML file in a desktop GIS to check that it was correctly created. 
 
+This code is likely to change frequently as I learn more about (1) the IPR Zones schemata and (2) have time to make the code much more functional. 
+
+In this first version I have purposely stayed away from using 3rd party libraries (open source ones...) to do things like reading directly from Shapefile. The reason for this is that the code will be much easier to run without needing to check on library dependancies. 
+
 ** 
 Installation
 **
 No real installation needed. A fully working Python installation is needed on your machine - only core libraries are used by this example. 
+**
