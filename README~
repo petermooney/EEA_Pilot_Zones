@@ -1,0 +1,23 @@
+** This is an example of using Python to generate the new IPR compliant XML for zones
+from a GML file **
+
+You should have converted your zones shapefile to GML using a GIS or ogr2ogr first. 
+
+The python code assumes that your GML file is called "AIRZONES.gml". 
+
+The example for Ireland is shown. 
+
+Please review the gml.cfg (Python config file) to see the various options. These are mainly focused on 
+the attirbute names in the original shapefile.
+
+To run the code - you can do so from the command prompt. 
+
+
+python createAQD-Zones-configReader.py > name-of-output-file.gml
+
+You can open this GML file in a desktop GIS to check that it was correctly created. 
+
+** 
+Installation
+**
+No real installation needed. A fully working Python installation is needed on your machine - only core libraries are used by this example. 
