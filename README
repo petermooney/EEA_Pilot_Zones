@@ -1,30 +1,68 @@
-Python script to generate GML zones file from another GML file (shapefile conversion)  
+*******************
+Python script to generate GML zones file (in IPR XML Schema) from another GML file (which has already undergone a ESRI Shapefile conversion)
+*******************  
 
-** This is an example of using Python to generate the new IPR compliant XML for zones
-from a GML file **
+-------------------------
+INSTALLATION REQUIREMENTS
+-------------------------
 
-You should have converted your zones shapefile to GML using a GIS or ogr2ogr first. 
+The script is cross platform compatible. It has been developed and tested in Windows 2008 Server and on several flavours
+of Ubuntu Linux (11:10 and 10:10). You will need a fully working Python environment. 
 
-The python code assumes that your GML file is called "AIRZONES.gml". 
+In this first release I have purposely stayed away from using 3rd party libraries (I will only use Open Source at a later stage) 
+to perform tasks like reading directly from Shapefile. My reasoning for this is that the 
+code will be much easier to run without having to check on library dependancies. 
 
-The example for Ireland is shown. 
+The python script should be run from the command prompt. 
+
+-------------------------
+HOW DOES THIS WORK
+-------------------------
+
+The script operates by converting a GML (Geographical Modelling Language) representation of an ESRI Shapefile
+representation of a set of Air Quality Zones. This ESRI Shapefile MUST have the data required by the IPR Schema for Zones 
+embedded in it's attribute table (DBF file) for this python script to work! Please refer to the 
+contents of gml.cfg in this repository to see what is required. 
+
+The requirements are that the ESRI Shapefile have the following attributes for each geographic object representing an Air Quality Zone:
+= The ID of the Air Quality Zone
+= The actual textual name of the Air Quality Zone
+= The resident population in the Zone
+= The 'type' of Zone - that is agglomeration or non-aglomeration
+= An attribute that holds the list of the list of pollutants (and protection targets) for the 
+pollutants/metals measured in this zone. The script is designed to read the pollutants as listed in the form of the Air Quality Questionaire
+which  will look like this 
+#SO2:HV;NO2:HV;PM10:H;PM25:H;Pb:H;C6H6:H;CO:H;O3:HV;As:H;Cd:H;Ni:H;Hg:H;PAH:H
+where HV is health and vegetation and H is just health. You will be also asked to give the name of this column/attribute. 
+= The name of the column/attribute in the DBF file holding the geometry. 
+= The name of the Coordinate Reference System.  this will be what coordinate system you converted your GML into. This will be an integer EPSG code. 
+
+A screen shot is provided in SCREENSHOT.png which will help you map your elements. You will notice that in the gml.cfg file 
+you must specify the names of these columns as they appear in the GML file (which is normally not significantly different to the original
+names in the ESRI Shapefile). Open the GML file in a text-editor or a Web Browser and you should be able to read these very easily. 
+An example is given in GML-SCREENSHOT.png - for readability the coordinates of the boundary polygon have been hidden.  
+
 
 Please review the gml.cfg (Python config file) to see the various options. These are mainly focused on 
 the attirbute names in the original shapefile.
 
-To run the code - you can do so from the command prompt. 
+-------------------------
+RUNNING THE CODE
+-------------------------
 
+To run the code - you can do so from the command prompt. 
 
 python createAQD-Zones-configReader.py > name-of-output-file.gml
 
 You can open this GML file in a desktop GIS to check that it was correctly created. 
 
+
+-------------------------
+WHAT'S NEXT?
+-------------------------
+
 This code is likely to change frequently as I learn more about (1) the IPR Zones schemata and (2) have time to make the code much more functional. 
+Please check back (and check out the code frequently) if you are interested. The README is always the place to start to use the code. 
 
-In this first version I have purposely stayed away from using 3rd party libraries (open source ones...) to do things like reading directly from Shapefile. The reason for this is that the code will be much easier to run without needing to check on library dependancies. 
 
-** 
-Installation
-**
-No real installation needed. A fully working Python installation is needed on your machine - only core libraries are used by this example. 
-**
+

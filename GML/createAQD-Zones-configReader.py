@@ -53,7 +53,6 @@ def printInspireID(zoneID,baseNameSpace):
 	
 
 def readGMLForFeatures():
-	gmldoc = minidom.parse('AIRZONES.gml')
 
 	# read the config file - so that we don't hardcode in the names of the attributes
 	
@@ -86,8 +85,16 @@ def readGMLForFeatures():
 
 	# the year which the population number was measured at - this is in the config file. 
 	populationYearName = config.get('ZoneDBF', 'populationYearName')
+	
 
 	srsName = config.get('ZoneDBF', 'srsName')
+
+	__INPUT_GML_FILE_NAME__ = config.get('ZoneDBF','inputGMLFile')
+
+	# read in the GML file. 
+	gmldoc = minidom.parse(__INPUT_GML_FILE_NAME__)
+	
+
 
 	# this should be fairly generic - if you use an ogr2ogr based transformation of
 	# your shapefile to GML. . 
