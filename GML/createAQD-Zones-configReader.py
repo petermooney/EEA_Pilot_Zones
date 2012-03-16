@@ -41,11 +41,11 @@ def printAmNameGML(sourceName,text):
 	print (tab(3) + "</gn:geographicalName>")
 	print (tab(2) + "</am:name>")
 
-def printInspireID(zoneID):
+def printInspireID(zoneID,baseNameSpace):
 	print (tab(2) + "<am:inspireId>")
 	print (tab(3) + "<base:Identifier>")
 	print (tab(4) + "<base:localId>"  + str(zoneID) + "</base:localId>")
-	print (tab(4) + "<base:namespace>"  + str("aqd.ie.zones") + "</base:namespace>")
+	print (tab(4) + "<base:namespace>"  + str(baseNameSpace) + "</base:namespace>")
 	print (tab(3) + "</base:Identifier>")
 	print (tab(2) + "</am:inspireId>")
 	
@@ -62,6 +62,13 @@ def readGMLForFeatures():
 	
 	# the top level name for the feature geometry for each zone. 
 	featureTypeName = config.get('ZoneDBF', 'featureTypeName')
+	
+	# base name space (inspire)
+	_baseNameSpace_ = config.get('ZoneDBF','baseNameSpace')
+	
+	# the name of the original shapefile 
+	
+	_shapefileName_ = config.get('ZoneDBF','shapefileName')
 
 	# this is the name of the attribute in the DBF file that holds the Zone ID or EIONET code
 	zoneIDVariableName = config.get('ZoneDBF', 'zoneIDVariableName')
@@ -128,8 +135,8 @@ def readGMLForFeatures():
 			# read from the config file... 
 			aggType = returnTagTextValue(ogrAIRZONES[j],typeOfZoneVariableName)
 			
-			printInspireID(zoneID)
-			printAmNameGML("airQZonesIE.shp",aqZone)
+			printInspireID(zoneID,_baseNameSpace_)
+			printAmNameGML(_shapefileName_,aqZone)
 			
 			print (tab(3) + "<am:specialisedZoneType>")
 			if (aggType == "nonag"):
