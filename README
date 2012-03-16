@@ -1,3 +1,5 @@
+Python script to generate GML zones file from another GML file (shapefile conversion)  
+
 ** This is an example of using Python to generate the new IPR compliant XML for zones
 from a GML file **
 
