@@ -1,3 +1,9 @@
+<!-- This is the legal basis section - from INSPIRE -->
+
+<!-- It needs to be included in the GML -->
+
+<!-- To make the code cleaner we can just include it from this separate GML file -->
+
       <am:zoneType codeSpace="http://inspire-registry.jrc.ec.europa.eu/registers/CLR/ZoneCodeType">airQualityManagementZone</am:zoneType>
 
       <am:validTime nilReason="Unknown" xsi:nil="true"/>
