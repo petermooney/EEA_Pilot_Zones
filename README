@@ -34,6 +34,9 @@ pollutants/metals measured in this zone. The script is designed to read the poll
 which  will look like this 
 #SO2:HV;NO2:HV;PM10:H;PM25:H;Pb:H;C6H6:H;CO:H;O3:HV;As:H;Cd:H;Ni:H;Hg:H;PAH:H
 where HV is health and vegetation and H is just health. You will be also asked to give the name of this column/attribute. 
+**DO NOT** put a semi-colon at the end of the list of pollutants/metals measured. The semi-colon is only a separator
+
+
 = The name of the column/attribute in the DBF file holding the geometry. 
 = The name of the Coordinate Reference System.  this will be what coordinate system you converted your GML into. This will be an integer EPSG code. 
 

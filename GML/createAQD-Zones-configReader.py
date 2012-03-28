@@ -54,27 +54,81 @@ def printInspireID(zoneID,baseNameSpace):
 
 def readGMLForFeatures():
 
+	__ERROR_STRING__ = ""
+	
+	__ErrorCount__ = 0
+
 	# read the config file - so that we don't hardcode in the names of the attributes
 	
 	config = ConfigParser.RawConfigParser()
 	config.read('gml.cfg')
 	
-	# the top level name for the feature geometry for each zone. 
-	featureTypeName = config.get('ZoneDBF', 'featureTypeName')
+	featureTypeName = ""
+	_baseNameSpace_ = ""
+	_shapefileName_ = ""
+	zoneIDVariableName = ""
+	actualNameOfZoneVariableName = ""
+	populationVariableName = ""
+	typeOfZoneVariableName = ""
+	pollutantListVariableName = ""
+	geometryVariableName = ""
+	populationYearName = ""
+	srsName = ""
+	__INPUT_GML_FILE_NAME__ = ""	
 	
-	# base name space (inspire)
-	_baseNameSpace_ = config.get('ZoneDBF','baseNameSpace')
+	 
+	try:
+		# the top level name for the feature geometry for each zone. 
+		featureTypeName = config.get('ZoneDBF', 'featureTypeName2')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for Feature Type Name in gml.cfg"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)
+		
+	try:
+		# base name space (inspire)
+		_baseNameSpace_ = config.get('ZoneDBF','baseNameSpace')
 	
-	# the name of the original shapefile 
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for Base Name Space in gml.cfg"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)	
 	
-	_shapefileName_ = config.get('ZoneDBF','shapefileName')
+	
+	try:
+		# the name of the original shapefile 
+		_shapefileName_ = config.get('ZoneDBF','shapefileName')
 
-	# this is the name of the attribute in the DBF file that holds the Zone ID or EIONET code
-	zoneIDVariableName = config.get('ZoneDBF', 'zoneIDVariableName')
-	# the actual text/local name of the Zone
-	actualNameOfZoneVariableName = config.get('ZoneDBF', 'actualNameOfZoneVariableName')
-	# the name of the attribute in the DBF file that holds the population value for this zone
-	populationVariableName = config.get('ZoneDBF', 'populationVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for Shapefile Name in gml.cfg - you must supply the name of the shapefile"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)	
+	
+	try:
+		# this is the name of the attribute in the DBF file that holds the Zone ID or EIONET code
+		zoneIDVariableName = config.get('ZoneDBF', 'zoneIDVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for zoneIDVariableName in gml.cfg - you must supply name of the attribute holdinf the Zone ID in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)		
+	
+	try:
+		# the actual text/local name of the Zone
+		actualNameOfZoneVariableName = config.get('ZoneDBF', 'actualNameOfZoneVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for actualNameOfZoneVariableName in gml.cfg - you must supply name of the attribute holding the text name of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)		
+		
+	try:
+		# the name of the attribute in the DBF file that holds the population value for this zone
+		populationVariableName = config.get('ZoneDBF', 'populationVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for populationVariableName in gml.cfg - you must supply name of the attribute holding the population value of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)		
+		
+	
 	# the name of the attribute in the DBF file that holds the type (agglom or non-aglom) value for this zone
 	typeOfZoneVariableName = config.get('ZoneDBF', 'typeOfZoneVariableName')
 	# this is hte name of the attribute in the DBF file that holds the list of pollutants (and maybe protection targets) for the 
@@ -86,11 +140,18 @@ def readGMLForFeatures():
 	# the year which the population number was measured at - this is in the config file. 
 	populationYearName = config.get('ZoneDBF', 'populationYearName')
 	
-
+	# the number of the spatial reference system that the coordinates in the originating GML file are specified in 
 	srsName = config.get('ZoneDBF', 'srsName')
 
+	# IMPORTANT
+	# the name - or full path - to the input GML file...
 	__INPUT_GML_FILE_NAME__ = config.get('ZoneDBF','inputGMLFile')
 
+	
+	#####
+	##### BEGIN READING AND PROCESSING. 
+	#####
+	
 	# read in the GML file. 
 	gmldoc = minidom.parse(__INPUT_GML_FILE_NAME__)
 	
