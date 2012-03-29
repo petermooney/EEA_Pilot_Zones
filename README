@@ -15,6 +15,9 @@ code will be much easier to run without having to check on library dependancies.
 
 The python script should be run from the command prompt. 
 
+Unless you are familiar with Python code - there is no need to even look at the Python code. All of the options you need to 
+run the code based on your input GML file are available in the configuration file "gml.cfg". 
+
 -------------------------
 HOW DOES THIS WORK
 -------------------------
@@ -45,6 +48,12 @@ you must specify the names of these columns as they appear in the GML file (whic
 names in the ESRI Shapefile). Open the GML file in a text-editor or a Web Browser and you should be able to read these very easily. 
 An example is given in GML-SCREENSHOT.png - for readability the coordinates of the boundary polygon have been hidden.  
 
+*** Responsible Party Information ***
+
+Inside the GML folder here - you will see EPAResponsibleParty.xml. This is a very simple XML file which holds details of the 
+person responsible for this IPR information in your agency or department. There is no need to rename the file. However you should
+change the details within the XML for your organisation. 
+
 
 Please review the gml.cfg (Python config file) to see the various options. These are mainly focused on 
 the attirbute names in the original shapefile.
@@ -53,7 +62,8 @@ the attirbute names in the original shapefile.
 RUNNING THE CODE
 -------------------------
 
-To run the code - you can do so from the command prompt. 
+To run the code - you can do so from the command prompt. Remember - you must have Python installed. 
+And you must open the command prompt to the directory that this python code is in. 
 
 python createAQD-Zones-configReader.py > name-of-output-file.gml
 

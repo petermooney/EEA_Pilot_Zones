@@ -76,10 +76,13 @@ def readGMLForFeatures():
 	srsName = ""
 	__INPUT_GML_FILE_NAME__ = ""	
 	
+	# the following code checks if the CFG file contains the necessary
+	# variables to run the application successfully - and populate the Zones GML/XML
+	# successfully - if all required variables are not provided the application will not run. 
 	 
 	try:
 		# the top level name for the feature geometry for each zone. 
-		featureTypeName = config.get('ZoneDBF', 'featureTypeName2')
+		featureTypeName = config.get('ZoneDBF', 'featureTypeName')
 	except ConfigParser.NoOptionError:
 		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for Feature Type Name in gml.cfg"
 		__ErrorCount__ = __ErrorCount__ + 1
@@ -128,152 +131,193 @@ def readGMLForFeatures():
 		__ErrorCount__ = __ErrorCount__ + 1
 		print (__ERROR_STRING__)		
 		
-	
-	# the name of the attribute in the DBF file that holds the type (agglom or non-aglom) value for this zone
-	typeOfZoneVariableName = config.get('ZoneDBF', 'typeOfZoneVariableName')
-	# this is hte name of the attribute in the DBF file that holds the list of pollutants (and maybe protection targets) for the 
-	# pollutants/metals measured in this zone. 
-	pollutantListVariableName = config.get('ZoneDBF', 'pollutantListVariableName')
-	# the actual geometry of the zone - the name of the attibute/column in the DBF file holding the geometry.
-	geometryVariableName = config.get('ZoneDBF', 'geometryVariableName')
-
-	# the year which the population number was measured at - this is in the config file. 
-	populationYearName = config.get('ZoneDBF', 'populationYearName')
-	
-	# the number of the spatial reference system that the coordinates in the originating GML file are specified in 
-	srsName = config.get('ZoneDBF', 'srsName')
-
-	# IMPORTANT
-	# the name - or full path - to the input GML file...
-	__INPUT_GML_FILE_NAME__ = config.get('ZoneDBF','inputGMLFile')
+	try:
+		# the name of the attribute in the DBF file that holds the type (agglom or non-aglom) value for this zone
+		typeOfZoneVariableName = config.get('ZoneDBF', 'typeOfZoneVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for typeOfZoneVariableName in gml.cfg - you must supply name of the attribute holding the type of zone (agglom, nonaglom) value of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)		
 
 	
-	#####
-	##### BEGIN READING AND PROCESSING. 
-	#####
+	try:
+		# this is hte name of the attribute in the DBF file that holds the list of pollutants (and maybe protection targets) for the 
+		# pollutants/metals measured in this zone. 
+		pollutantListVariableName = config.get('ZoneDBF', 'pollutantListVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for pollutantListVariableName in gml.cfg - you must supply name of the attribute holding the pollutantListVariableName (list of metals, pollutants, etc) value of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)		
+
+	try:
+		# the actual geometry of the zone - the name of the attibute/column in the DBF file holding the geometry.
+		# most likely this will be <ogr:geometryProperty> if you used OGR from something like QGIS to create the input file. 
+		geometryVariableName = config.get('ZoneDBF', 'geometryVariableName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for geometryVariableName in gml.cfg - you must supply name of the attribute holding the geometry value of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)		
 	
-	# read in the GML file. 
-	gmldoc = minidom.parse(__INPUT_GML_FILE_NAME__)
-	
+	try:
+		# the year which the population number was measured at - this is in the config file. 
+		populationYearName = config.get('ZoneDBF', 'populationYearName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for populationYearName in gml.cfg - you must supply name of the attribute holding the population year of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)
 
 
-	# this should be fairly generic - if you use an ogr2ogr based transformation of
-	# your shapefile to GML. . 
-	gmlfeatureMember = gmldoc.getElementsByTagName('gml:featureMember')
+	try:
+		# the number of the spatial reference system that the coordinates in the originating GML file are specified in 
+		srsName = config.get('ZoneDBF', 'srsName')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for srsName in gml.cfg - you must supply name of the attribute holding the Spatial Reference System of the geometry of the zone in the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)
+
+
+	try:
+		# IMPORTANT
+		# the name - or full path - to the input GML file.........
+		__INPUT_GML_FILE_NAME__ = config.get('ZoneDBF','inputGMLFile')
+	except ConfigParser.NoOptionError:
+		__ERROR_STRING__ = __ERROR_STRING__ + "\nNo Option Error for inputGMLFile in gml.cfg - you must supply name of the attribute holding the name of the input GML file"
+		__ErrorCount__ = __ErrorCount__ + 1
+		print (__ERROR_STRING__)
 	
 
+	## if we have no errors we can proceed to doing the processing. 
+	if (__ErrorCount__ == 0):
+
 	
-	N = len(gmlfeatureMember)
+		#####
+		##### BEGIN READING AND PROCESSING. 
+		#####
 	
-	i = 0
-	topMatter = getXMLStaticValues("Top-of-GML.gml",0)
-	print (topMatter)
+		# read in the GML file. 
+		gmldoc = minidom.parse(__INPUT_GML_FILE_NAME__)
 	
-	print ("<!-- Responsible Party Information  -->")
+		# this should be fairly generic - if you use an ogr2ogr based transformation of
+		# your shapefile to GML. . 
+		gmlfeatureMember = gmldoc.getElementsByTagName('gml:featureMember')
 	
-	responsibleParty = getXMLStaticValues("EPAResponsibleParty.xml",1)
-	print (responsibleParty)
-	
-	print ("<!-- Now begin the zone information -->")
-	
-	while i < N:
-		ogrAIRZONES = gmlfeatureMember[i].getElementsByTagName('ogr:AIRZONES')
+		i = 0
 		
+		# print out the top of the output GML file - this is the information regarding the 
+		# the schema etc. 
+		topMatter = getXMLStaticValues("Top-of-GML.gml",0)
+		print (topMatter)
+	
+		# next is the information about the responsible party. 
+		print ("<!-- Responsible Party Information  -->")
+	
+		responsibleParty = getXMLStaticValues("EPAResponsibleParty.xml",1)
+		print (responsibleParty)
+	
+		print ("<!-- Now begin the zone information -->")
+	
+		while i < len(gmlfeatureMember):
+			ogrAIRZONES = gmlfeatureMember[i].getElementsByTagName('ogr:AIRZONES')
 		
-		j = 0
-		while j < len(ogrAIRZONES):
+			j = 0
+			while j < len(ogrAIRZONES):
 			
-			# this is the zoneID - and it's proper name is in the config file. 
-			zoneID = returnTagTextValue(ogrAIRZONES[j],zoneIDVariableName)
+				# this is the zoneID - and it's proper name is in the config file. 
+				zoneID = returnTagTextValue(ogrAIRZONES[j],zoneIDVariableName)
 			
-			__GML_ID__ = str(zoneID) + "__" + str(i) # this is unique 
+				__GML_ID__ = str(zoneID) + "__" + str(i) # this is unique 
 			
-			print ("<!-- Write out the XML for the feature member " + __GML_ID__ + " -->")
+				print ("<!-- Write out the XML for the feature member " + __GML_ID__ + " -->")
 			
-			print ("<gml:featureMember>")
-			print (tab(1) + "<aqd:AQD_Zone gml:id=\"" + __GML_ID__ + "\">")
+				print ("<gml:featureMember>")
+				print (tab(1) + "<aqd:AQD_Zone gml:id=\"" + __GML_ID__ + "\">")
 
 
-			# the actual name of the zone . . in the config file. 
-			aqZone  = returnTagTextValue(ogrAIRZONES[j],actualNameOfZoneVariableName)
+				# the actual name of the zone . . in the config file. 
+				# this extracts the name of the zone from the input GML file. 
+				aqZone  = returnTagTextValue(ogrAIRZONES[j],actualNameOfZoneVariableName)
 
-			# read from the config file....
-			population = returnTagTextValue(ogrAIRZONES[j],populationVariableName)
+				# now get the population from the input GML file. 
+				population = returnTagTextValue(ogrAIRZONES[j],populationVariableName)
 
-			# read from the config file... 
-			aggType = returnTagTextValue(ogrAIRZONES[j],typeOfZoneVariableName)
+				# now get the agglomeration type from the input GML file. 
+				aggType = returnTagTextValue(ogrAIRZONES[j],typeOfZoneVariableName)
 			
-			printInspireID(zoneID,_baseNameSpace_)
-			printAmNameGML(_shapefileName_,aqZone)
+				printInspireID(zoneID,_baseNameSpace_)
+				printAmNameGML(_shapefileName_,aqZone)
 			
-			print (tab(3) + "<am:specialisedZoneType>")
-			if (aggType == "nonag"):
-				print (tab(4) + "nonagglomeration")
-			else:
-				print (tab(4) + "agglomeration")
-			print (tab(3) + "</am:specialisedZoneType>")
-			print ("<!-- In spreadsheet of mappings ... this is zoneType - left both here just to check them both-->")
-			print (tab(3) + "<am:zoneType>")
-			if (aggType == "nonag"):
-				print (tab(4) + "nonagglomeration")
-			else:
-				print (tab(4) + "agglomeration")
-			print (tab(3) + "</am:zoneType>")
+				print (tab(3) + "<am:specialisedZoneType>")
+				if (aggType == "nonag"):
+					print (tab(4) + "nonagglomeration")
+				else:
+					print (tab(4) + "agglomeration")
+				print (tab(3) + "</am:specialisedZoneType>")
 			
+				print ("<!-- In spreadsheet of mappings ... this is zoneType - left both here just to check them both-->")
+				print (tab(3) + "<am:zoneType>")
+				if (aggType == "nonag"):
+					print (tab(4) + "nonagglomeration")
+				else:
+					print (tab(4) + "agglomeration")
+				print (tab(3) + "</am:zoneType>")
 			
-			legalBasisEtc = getXMLStaticValues("LegalBasis-Section.gml",2)
+				# take the legal basis information from the external file. 
+				legalBasisEtc = getXMLStaticValues("LegalBasis-Section.gml",2)
 
-			print (legalBasisEtc)
+				print (legalBasisEtc)
 			
 
 			
-			print (tab(2) + "<aqd:zoneCode>" + str(zoneID) + "</aqd:zoneCode>")
-			print (tab(2) + "<aqd:LAU>" + str("unknown") + "</aqd:LAU>")
-			print (tab(2) + "<aqd:residentPopulation>" + str(population) + "</aqd:residentPopulation>")
-			print (tab(2) + "<aqd:residentPopulationYear>" + str(populationYearName) + "</aqd:residentPopulationYear>")
-			# this needs to be XML as it is the GML of the polygon... 
-			# the geometry should be already created by the GML - so it is actually 
-			# just really a copy and paste of the geometry. 
-			# we get the name of the attribute from the Shapefile in the config file. 
-			ogrGeom = ogrAIRZONES[j].getElementsByTagName(geometryVariableName)
+				print (tab(2) + "<aqd:zoneCode>" + str(zoneID) + "</aqd:zoneCode>")
+				print (tab(2) + "<aqd:LAU>" + str("unknown") + "</aqd:LAU>")
+				print (tab(2) + "<aqd:residentPopulation>" + str(population) + "</aqd:residentPopulation>")
+				print (tab(2) + "<aqd:residentPopulationYear>" + str(populationYearName) + "</aqd:residentPopulationYear>")
+				# this needs to be XML as it is the GML of the polygon... 
+				# the geometry should be already created by the GML - so it is actually 
+				# just really a copy and paste of the geometry. 
+				# we get the name of the attribute from the Shapefile in the config file. 
 			
-			## geometry starts here... 
-			print ("<!-- The GML geometry object ENDS here .. -->")
-			print (tab(2) + "<am:geometry>")
+				ogrGeom = ogrAIRZONES[j].getElementsByTagName(geometryVariableName)
 			
-			theGeometry = ""
-			print ("<!-- There are " + str(len(ogrGeom)) + " GML geometry objects -->")
-			for z1 in ogrGeom:
+				## geometry starts here... 
+				print ("<!-- The GML geometry object STARTS here .. -->")
+				print (tab(2) + "<am:geometry>")
+			
+				theGeometry = ""
+				print ("<!-- There are " + str(len(ogrGeom)) + " GML geometry objects -->")
+				for z1 in ogrGeom:
 				
-				theGeometry = str(z1.childNodes[0].toxml())
+					theGeometry = str(z1.childNodes[0].toxml())
 			
-			if (theGeometry.find("gml:MultiPolygon") >= 0):
-				print ("<!-- this is a multipolygon - local id supplied and SRS -->")
-				# need to replace with the coordinate reference system... 
-				theGeometry = theGeometry.replace("<gml:MultiPolygon>", "<gml:MultiPolygon srsName=\"" + srsName + "\" gml:id=\"GeomID_" +  str(zoneID) + "__" + str(i) + "\">",1)
-			else:
-				print ("<!-- this is a gml polygon  - local id supplied and SRS -->")
-				theGeometry = theGeometry.replace("<gml:Polygon>", "<gml:Polygon srsName=\"" + srsName + "\" gml:id=\"GeomID_" +  str(zoneID) + "__" + str(i) + "\">",1)
+					if (theGeometry.find("gml:MultiPolygon") >= 0):
+						print ("<!-- this is a multipolygon - local id supplied and SRS -->")
+						# need to replace with the coordinate reference system... 
+						theGeometry = theGeometry.replace("<gml:MultiPolygon>", "<gml:MultiPolygon srsName=\"" + srsName + "\" gml:id=\"GeomID_" +  str(zoneID) + "__" + str(i) + "\">",1)
+					else:
+						print ("<!-- this is a gml polygon  - local id supplied and SRS -->")
+						theGeometry = theGeometry.replace("<gml:Polygon>", "<gml:Polygon srsName=\"" + srsName + "\" gml:id=\"GeomID_" +  str(zoneID) + "__" + str(i) + "\">",1)
 
-			print (tab(3) + theGeometry)
-			print (tab(2) + "</am:geometry>")			
-			print ("<!-- The GML geometry object ENDS here .. -->")
+				print (tab(3) + theGeometry)
+				print (tab(2) + "</am:geometry>")			
+				print ("<!-- The GML geometry object ENDS here .. -->")
 			
-			# the name of the attribute variable for pollutant. 
-			pollutantList = returnTagTextValue(ogrAIRZONES[j],pollutantListVariableName)
+				# the name of the attribute variable for pollutant. 
+				pollutantList = returnTagTextValue(ogrAIRZONES[j],pollutantListVariableName)
 			
-			print ("\t\t<!-- Metals and Pollutant listing .. -->")
-			print ("<!-- Codelist not available - used chemical symbols as temporary data-->")
-			printPollutantsListing(pollutantList)
+				print ("\t\t<!-- Metals and Pollutant listing .. -->")
+				print ("<!-- Codelist not available - used chemical symbols as temporary data-->")
+				printPollutantsListing(pollutantList)
 			
-			print (tab(1) + "</aqd:AQD_Zone>")
-			print ("</gml:featureMember>")
-			j = j + 1
-		i = i + 1
+				print (tab(1) + "</aqd:AQD_Zone>")
+				print ("</gml:featureMember>")
+				j = j + 1
+			i = i + 1
 
-
-	print ("</gml:FeatureCollection>")
-
+		print ("</gml:FeatureCollection>")
+	
+	else:
+		print (" There has been some errors ... ")
+		
 # this is the semi colon separated list from the GML file. 
 #SO2:HV;NO2:HV;PM10:H;PM25:H;Pb:H;C6H6:H;CO:H;O3:HV;As:H;Cd:H;Ni:H;Hg:H;PAH:H
 def printPollutantsListing(pollList):
