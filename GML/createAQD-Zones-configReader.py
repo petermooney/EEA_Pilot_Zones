@@ -327,19 +327,20 @@ def printPollutantsListing(pollList):
 	for poll in individualPollutants:
 		
 		# we need to split poll up...
+		# deal with ; placed at the end of the list of pollutants... 
+		if (len(str(pollSplit)) > 1):
+			pollSplit = str(poll).split(":")
 		
-		pollSplit = str(poll).split(":")
+			print("<aqd:pollutants>")
+			print("\t<aqd:pollutantCode>" + str(pollSplit[0]) + "</aqd:pollutantCode>")
 		
-		print("<aqd:pollutants>")
-		print("\t<aqd:pollutantCode>" + str(pollSplit[0]) + "</aqd:pollutantCode>")
+			typeOfProtection = "Health and Vegetation/ecosystem"
 		
-		typeOfProtection = "Health and Vegetation/ecosystem"
+			if (pollSplit[1] == "H"):
+				typeOfProtection = "Health"
 		
-		if (pollSplit[1] == "H"):
-			typeOfProtection = "Health"
-		
-		print("\t<aqd:protectionTarget>" + str(typeOfProtection) + "</aqd:protectionTarget>")
-		print("</aqd:pollutants>")
+			print("\t<aqd:protectionTarget>" + str(typeOfProtection) + "</aqd:protectionTarget>")
+			print("</aqd:pollutants>")
 	
 
 
